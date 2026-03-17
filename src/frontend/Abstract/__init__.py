@@ -1,3 +1,3 @@
 from .Input import Input
-from .interface import Interface
+from .Interface import Interface
 from .Popup import Popup
