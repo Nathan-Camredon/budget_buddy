@@ -1,1 +1,1 @@
-from .Abstract import Input
+from .Abstract import Input, Interface
