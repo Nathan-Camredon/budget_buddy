@@ -14,15 +14,18 @@ class InterfaceLogin(Interface):
     Displays a username/password form and a login button.
     """
 
-    def __init__(self, master: Any, on_login: Optional[Callable[[str, str], None]] = None, **kwargs):
+    def __init__(self, master: Any, controller: Any = None, on_login: Optional[Callable[[str, str], None]] = None, **kwargs):
         """
         Parameters
         ----------
         master : Any
             The parent widget.
+        controller : Any, optional
+            The App controller for navigation.
         on_login : Callable[[str, str], None], optional
             Callback called with (username, password) when the user clicks the login button.
         """
+        self.controller = controller
         self._on_login = on_login
         super().__init__(master, title="Connexion", **kwargs)
 
@@ -115,10 +118,12 @@ class InterfaceLogin(Interface):
             
             if verifier.is_admin():
                 print("Accès Administrateur : Redirection vers InterfaceAdmin...")
-                # TODO : Logique de changement de page (ex: self.master.switch_to_admin())
+                if self.controller:
+                    self.controller.show_admin()
             else:
-                print("Accès Client : Redirection vers InterfaceClient...")
-                # TODO : Logique de changement de page (ex: self.master.switch_to_user())
+                print("Accès Client : Redirection vers InterfaceUser...")
+                if self.controller:
+                    self.controller.show_user()
             
             # Déclencher le callback optionnel si présent
             if self._on_login:
