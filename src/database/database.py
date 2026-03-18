@@ -21,7 +21,8 @@ class Database:
                 name TEXT NOT NULL,
                 first_name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+                is_admin INTEGER DEFAULT 0 CHECK (is_admin IN (0, 1))
             )
         ''')
 
