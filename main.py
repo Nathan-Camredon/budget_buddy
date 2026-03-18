@@ -1,6 +1,5 @@
 import customtkinter as ctk
 from src.frontend.InterfaceLogin import InterfaceLogin
-from src.backend.Verification import Verify
 
 
 def main() -> None:
@@ -12,32 +11,8 @@ def main() -> None:
     app.geometry("1920x1080")
     app.resizable(False, False)
 
-    def handle_login(username: str, password: str) -> None:
-        """
-        Callback déclenché quand l'utilisateur clique sur le bouton de connexion.
-        """
-        print(f"Tentative de connexion avec {username}...")
-        
-        # On crée une instance de ta classe Verify
-        verifier = Verify(username, password)
-        
-        # On vérifie les identifiants
-        if verifier.verify():
-            print("Connexion réussie !")
-            login_page._clear_error()
-            
-            # Vérification du type de compte (Admin ou Client)
-            if verifier.is_admin():
-                print("Redirection vers InterfaceAdmin...")
-                # TODO : login_page.pack_forget() ; admin_page.show()
-            else:
-                print("Redirection vers InterfaceClient...")
-                # TODO : login_page.pack_forget() ; customer_page.show()
-        else:
-            print("Échec de la connexion.")
-            login_page._show_error("Identifiant ou mot de passe incorrect.")
-
-    login_page = InterfaceLogin(master=app, on_login=handle_login)
+    # L'InterfaceLogin gère maintenant sa propre logique de connexion
+    login_page = InterfaceLogin(master=app)
     login_page.show()
 
     app.mainloop()

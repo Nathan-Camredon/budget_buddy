@@ -4,6 +4,7 @@ from typing import Any, Optional, Callable
 from src.frontend.Abstract.Interface import Interface
 from src.frontend.Abstract.Input import Input
 from src.frontend.Abstract.Button import Button
+from src.backend.Verification import Verify
 
 
 class InterfaceLogin(Interface):
@@ -96,7 +97,7 @@ class InterfaceLogin(Interface):
     # ------------------------------------------------------------------
 
     def _handle_login(self) -> None:
-        """Validate inputs and trigger the on_login callback."""
+        """Validate inputs and handle the authentication logic."""
         username = self._username_input.getText().strip()
         password = self._password_input.getText()
 
@@ -106,8 +107,24 @@ class InterfaceLogin(Interface):
 
         self._clear_error()
 
-        if self._on_login:
-            self._on_login(username, password)
+        # Logique de vérification déplacée ici pour alléger le main
+        verifier = Verify(username, password)
+        
+        if verifier.verify():
+            print(f"Connexion réussie pour {username} !")
+            
+            if verifier.is_admin():
+                print("Accès Administrateur : Redirection vers InterfaceAdmin...")
+                # TODO : Logique de changement de page (ex: self.master.switch_to_admin())
+            else:
+                print("Accès Client : Redirection vers InterfaceClient...")
+                # TODO : Logique de changement de page (ex: self.master.switch_to_user())
+            
+            # Déclencher le callback optionnel si présent
+            if self._on_login:
+                self._on_login(username, password)
+        else:
+            self._show_error("Identifiant ou mot de passe incorrect.")
 
     def _show_error(self, message: str) -> None:
         """Display an error message below the password field."""
