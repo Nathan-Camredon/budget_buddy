@@ -25,9 +25,14 @@ def main() -> None:
         if verifier.verify():
             print("Connexion réussie !")
             login_page._clear_error()
-            # TODO : Cacher la page de login et afficher la page de l'utilisateur
-            # login_page.pack_forget() 
-            # user_page.show()
+            
+            # Vérification du type de compte (Admin ou Client)
+            if verifier.is_admin():
+                print("Redirection vers InterfaceAdmin...")
+                # TODO : login_page.pack_forget() ; admin_page.show()
+            else:
+                print("Redirection vers InterfaceClient...")
+                # TODO : login_page.pack_forget() ; customer_page.show()
         else:
             print("Échec de la connexion.")
             login_page._show_error("Identifiant ou mot de passe incorrect.")
