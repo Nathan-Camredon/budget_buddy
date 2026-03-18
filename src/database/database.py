@@ -18,7 +18,7 @@ class Database:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 login TEXT NOT NULL,
                 password TEXT NOT NULL,
-                name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
                 first_name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -42,6 +42,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 account_id INTEGER NOT NULL,
+                target_account_id INTEGER,
                 transaction_type TEXT CHECK(transaction_type IN ('depot', 'retrait', 'virement')) NOT NULL, 
                 amount REAL NOT NULL,
                 category TEXT NOT NULL,
