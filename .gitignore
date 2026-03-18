@@ -74,3 +74,6 @@ config.local.*
 
 # Antigravity / AI tools
 .gemini/
+
+# seed
+seed.py
