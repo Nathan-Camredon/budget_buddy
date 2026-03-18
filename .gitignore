@@ -2,17 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.pyo
-*.pyd
-
-# Distribution / packaging
-build/
-dist/
-*.egg
-*.egg-info/
-.eggs/
-wheels/
-MANIFEST
 
 # OS generated files
 .DS_Store
@@ -22,7 +11,6 @@ MANIFEST
 .Trashes
 ehthumbs.db
 Thumbs.db
-desktop.ini
 
 # Virtual environments
 .env
@@ -32,45 +20,12 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-.python-version
 
 # IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
-*.sublime-project
-*.sublime-workspace
-
-# Testing
-.pytest_cache/
-.tox/
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-*.cover
-nosetests.xml
-test-results/
-
-# Type checking
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.pytype/
-
-# Logs
-*.log
-logs/
-
-# Secrets / config sensibles
-*.env
-secrets.json
-config.local.*
 
 # Project specific
 *.db
-*.sqlite3
-
-# Antigravity / AI tools
-.gemini/
