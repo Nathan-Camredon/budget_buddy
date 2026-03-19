@@ -1,4 +1,5 @@
 from src.database.database import Database
+import hashlib
 
 class CreateAccount:
     def __init__(self, login, password, last_name, first_name, email, is_admin=0):
@@ -10,12 +11,16 @@ class CreateAccount:
         self.is_admin = is_admin
         self.db = Database()
 
+    def _hash_password(self, password: str) -> str:
+        return hashlib.sha256(password.encode()).hexdigest()
+
     def save(self):
+        hashed_password = self._hash_password(self.password)
         query_customer = """
             INSERT INTO customer (login, password, last_name, first_name, email, is_admin)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        params_customer = (self.login, self.password, self.last_name, self.first_name, self.email, self.is_admin)
+        params_customer = (self.login, hashed_password, self.last_name, self.first_name, self.email, self.is_admin)
         
         try:
             # Create Customer
