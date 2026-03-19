@@ -1,0 +1,11 @@
+Logins des comptes Budget Buddy :
+
+1. Admin : 
+   Email : dupont@budgetbuddy.fr
+   Mot de passe : admin1234
+   Rôle : Admin
+
+2. User :
+   Email : admin@budgetbuddy.fr
+   Mot de passe : admin
+   Rôle : User / Admin (à vérifier selon is_admin dans la DB)

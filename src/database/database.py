@@ -54,6 +54,15 @@ class Database:
 
         self.conn.commit()
 
+    def execute_query(self, query, params=()):
+        self.cursor.execute(query, params)
+        self.conn.commit()
+        return self.cursor.lastrowid
+
+    def fetch_all(self, query, params=()):
+        self.cursor.execute(query, params)
+        return self.cursor.fetchall()
+
     def close(self):
         self.conn.close()
 
