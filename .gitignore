@@ -77,3 +77,6 @@ config.local.*
 
 # seed
 seed.py
+
+# Sensitive notes
+note.txt
