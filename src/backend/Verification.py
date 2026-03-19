@@ -1,4 +1,5 @@
 import sqlite3
+import hashlib
 from pathlib import Path
 
 class Verify: 
@@ -10,9 +11,10 @@ class Verify:
         db_path = "src/database/budget_buddy.db"
         connexion = sqlite3.connect(db_path)
         
+        hashed_password = self._hash_password(self.ipassword)
         request = "SELECT password FROM customer WHERE email = ? AND password = ?"
         
-        cursor = connexion.execute(request, (self.iid, self.ipassword,))
+        cursor = connexion.execute(request, (self.iid, hashed_password,))
         result = cursor.fetchone()
         
         connexion.close()
@@ -63,3 +65,7 @@ class Verify:
 
     def uncoding(self):
         pass
+
+    def _hash_password(self, password: str) -> str:
+        """Hash a password using SHA-256."""
+        return hashlib.sha256(password.encode()).hexdigest()
