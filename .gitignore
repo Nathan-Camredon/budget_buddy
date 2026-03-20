@@ -80,3 +80,6 @@ seed.py
 
 # Sensitive notes
 note.txt
+
+# Testing
+test_graphic.py
