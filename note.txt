@@ -3,14 +3,4 @@ Logins des comptes Budget Buddy :
 1. Super Admin (NOUVEAU) :
    Email : superadmin@bank.com
    Mot de passe : superpassword123
-   Rôle : Admin (Haché en DB)
-
-2. Admin : 
-   Email : dupont@budgetbuddy.fr
-   Mot de passe : admin1234
-   Rôle : Admin (Haché en DB)
-
-3. User :
-   Email : admin@budgetbuddy.fr
-   Mot de passe : admin
-   Rôle : User (Haché en DB)
+   Rôle : Admin 

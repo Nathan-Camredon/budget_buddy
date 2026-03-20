@@ -18,6 +18,8 @@ class App(ctk.CTk):
         self.login_page = InterfaceLogin(master=self, controller=self)
         self.admin_page = InterfaceAdmin(master=self, controller=self)
         self.user_page = InterfaceUser(master=self, controller=self)
+        
+        self.current_user = None
 
         # Affichage de la page de connexion par défaut
         self.show_login()
