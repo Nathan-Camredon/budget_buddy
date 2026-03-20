@@ -121,7 +121,7 @@ class InterfaceAdmin(Interface):
         data['is_admin'] = 1 if self.is_admin_var.get() else 0
 
         # Basic validation
-        if not all([data['login'], data['password'], data['name'], data['first_name'], data['email']]):
+        if not all([data['login'], data['password'], data['last_name'], data['first_name'], data['email']]):
             messagebox.showerror("Erreur", "Veuillez remplir tous les champs.")
             return
 
