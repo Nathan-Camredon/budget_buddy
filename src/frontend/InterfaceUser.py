@@ -133,8 +133,9 @@ class InterfaceUser(Interface):
 
     def load_history(self, account_id) -> None:
         """Fetch and display transaction history."""
-        from src.backend.history import History
-        transactions = History.get_history_by_account(account_id)
+        from src.backend.history_service import HistoryService
+        service = HistoryService()
+        transactions = service.get_history_by_date_desc(account_id, None) # date param is ignored by the service method implementation but required by signature
         
         # Clear existing items
         for child in self.display_frame.winfo_children():
@@ -156,17 +157,18 @@ class InterfaceUser(Interface):
 
         # Data rows
         for t in transactions:
-            # (date, transaction_type, amount, category, description)
+            # HistoryService.get_all_history returns SELECT * (id, account_id, target, type, amount, cat, desc, date)
+            # Indices: 7: date, 3: type, 4: amount, 5: category, 6: description
             row = ctk.CTkFrame(self.display_frame, fg_color="transparent")
             row.pack(fill="x", pady=2)
             
-            color = "#27ae60" if t[1] == 'depot' else "#c0392b"
+            color = "#27ae60" if t[3] == 'depot' else "#c0392b"
             
-            ctk.CTkLabel(row, text=str(t[0]), width=widths[0], text_color="black").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(t[1]).capitalize(), width=widths[1], text_color=color, font=ctk.CTkFont(weight="bold")).pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=f"{t[2]:.2f}€", width=widths[2], text_color="black").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(t[3]), width=widths[3], text_color="black").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(t[4]) if t[4] else "", width=widths[4], text_color="black", anchor="w").pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=str(t[7]), width=widths[0], text_color="black").pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=str(t[3]).capitalize(), width=widths[1], text_color=color, font=ctk.CTkFont(weight="bold")).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=f"{t[4]:.2f}€", width=widths[2], text_color="black").pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=str(t[5]), width=widths[3], text_color="black").pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=str(t[6]) if t[6] else "", width=widths[4], text_color="black", anchor="w").pack(side="left", padx=5)
 
     def dummy(self):
         print("Bouton cliqué (en cours d'implémentation)")
