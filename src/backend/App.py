@@ -7,21 +7,21 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # Configuration de la fenêtre principale
+        # Main window configuration
         self.title("Budget Buddy")
         self.geometry("1280x720")
         self.resizable(False, False)
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
-        # Initialisation des pages
+        # Page initialization
         self.login_page = InterfaceLogin(master=self, controller=self)
         self.admin_page = InterfaceAdmin(master=self, controller=self)
         self.user_page = InterfaceUser(master=self, controller=self)
         
         self.current_user = None
 
-        # Affichage de la page de connexion par défaut
+        # Display the login page by default
         self.show_login()
 
     def show_login(self):

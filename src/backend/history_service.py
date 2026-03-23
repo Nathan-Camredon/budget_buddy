@@ -10,9 +10,9 @@ class HistoryService:
 
     # Get all history
     def get_all_history(self, account_id):
-        """ Recupère tout l'historique des transactions d'un compte
+        """ retrieves the entire transaction history of an account
         
-        Args: account_id (int): ID du compte.
+        Args: account_id (int): Account ID.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? '''
         self.db.cursor.execute(request, (account_id,))
@@ -21,10 +21,10 @@ class HistoryService:
 
     # Get history by date
     def get_history_by_date_desc(self, account_id, date):
-        """ Recupère l'historique des transactions d'un compte par date
+        """ Retrieves the transaction history of an account by date (descending)
         
-        Args: account_id (int): ID du compte.
-            date (str): Date de la transaction.
+        Args: account_id (int): Account ID.
+            date (str): Transaction date.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? ORDER BY date DESC '''
         self.db.cursor.execute(request, (account_id,))
@@ -33,10 +33,10 @@ class HistoryService:
 
     # Get history by date
     def get_history_by_date_asc(self, account_id, date):
-        """ Recupère l'historique des transactions d'un compte par date
+        """ Retrieves the transaction history of an account by date (ascending)
         
-        Args: account_id (int): ID du compte.
-            date (str): Date de la transaction.
+        Args: account_id (int): Account ID.
+            date (str): Transaction date.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? ORDER BY date ASC '''
         self.db.cursor.execute(request, (account_id,))
@@ -45,10 +45,10 @@ class HistoryService:
 
     # Get history by amount
     def get_history_by_amount_desc(self, account_id, amount):
-        """ Recupère l'historique des transactions d'un compte par montant
+        """ Retrieves the transaction history of an account by amount (descending)
         
-        Args: account_id (int): ID du compte.
-            amount (float): Montant de la transaction.
+        Args: account_id (int): Account ID.
+            amount (float): Transaction amount.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? ORDER BY amount DESC '''
         self.db.cursor.execute(request, (account_id,))
@@ -57,10 +57,10 @@ class HistoryService:
 
     # Get history by amount
     def get_history_by_amount_asc(self, account_id, amount):
-        """ Recupère l'historique des transactions d'un compte par montant
+        """ Retrieves the transaction history of an account by amount (ascending)
         
-        Args: account_id (int): ID du compte.
-            amount (float): Montant de la transaction.
+        Args: account_id (int): Account ID.
+            amount (float): Transaction amount.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? ORDER BY amount ASC '''
         self.db.cursor.execute(request, (account_id,))
@@ -69,10 +69,10 @@ class HistoryService:
 
     # Get history by category
     def get_history_by_category(self, account_id, category):
-        """ Recupère l'historique des transactions d'un compte par catégorie
+        """ Retrieves the transaction history of an account by category
         
-        Args: account_id (int): ID du compte.
-            category (str): Catégorie de la transaction.
+        Args: account_id (int): Account ID.
+            category (str): Transaction category.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? AND category = ? '''
         self.db.cursor.execute(request, (account_id, category))
@@ -81,10 +81,10 @@ class HistoryService:
 
     # Get history by type
     def get_history_by_type(self, account_id, transaction_type):
-        """ Recupère l'historique des transactions d'un compte par type
+        """ Retrieves the transaction history of an account by type
         
-        Args: account_id (int): ID du compte.
-            transaction_type (str): Type de la transaction.
+        Args: account_id (int): Account ID.
+            transaction_type (str): Transaction type.
         """
         request = ''' SELECT * FROM history WHERE account_id = ? AND transaction_type = ? '''
         self.db.cursor.execute(request, (account_id, transaction_type))
@@ -93,7 +93,7 @@ class HistoryService:
 
     # Get history between two dates
     def get_history_between_dates(self, account_id, start_date, end_date):
-        """ Recupère l'historique entre deux dates précise (format YYYY-MM-DD) """
+        """ Retrieves the history between two specific dates (format YYYY-MM-DD) """
         request = ''' SELECT * FROM history WHERE account_id = ? AND date BETWEEN ? AND ? ORDER BY date DESC '''
         self.db.cursor.execute(request, (account_id, start_date, end_date))
         return self.db.cursor.fetchall()
@@ -102,11 +102,11 @@ class HistoryService:
     # Get history by month
     def get_history_by_month(self, account_id, month, year):
         """ 
-        Recupère l'historique pour un mois donné.
+        Retrieves the history for a given month.
         month: format '01', '02'...
         year: format '2024'
         """
-        # On utilise strftime pour extraire le mois et l'année de la colonne date de SQLite
+        # Use strftime to extract the month and year from the SQLite date column
         request = ''' 
             SELECT * FROM history 
             WHERE account_id = ? 

@@ -13,16 +13,16 @@ class Deal:
     # Deposit
     def add_deal(self, account_id, amount, category, description=""):
         """
-        Ajoute un dépôt à un compte.
+        Adds a deposit to an account.
         
         Args:
-            account_id (int): ID du compte.
-            amount (float): Montant du dépôt.
-            category (str): Catégorie du dépôt.
-            description (str): Description du dépôt.
+            account_id (int): Account ID.
+            amount (float): Deposit amount.
+            category (str): Deposit category.
+            description (str): Deposit description.
             
         Returns:
-            tuple: (bool, str) - Statut et message.
+            tuple: (bool, str) - Status and message.
         """
 
         if amount <= 0:
@@ -46,16 +46,16 @@ class Deal:
     # Withdrawal
     def remove_deal(self, account_id, amount, category, description=""):
         """
-        Retire un montant d'un compte.
+        Withdraws an amount from an account.
         
         Args:
-            account_id (int): ID du compte.
-            amount (float): Montant du retrait.
-            category (str): Catégorie du retrait.
-            description (str): Description du retrait.
+            account_id (int): Account ID.
+            amount (float): Withdrawal amount.
+            category (str): Withdrawal category.
+            description (str): Withdrawal description.
             
         Returns:
-            tuple: (bool, str) - Statut et message.
+            tuple: (bool, str) - Status and message.
         """
 
         if amount <= 0:
@@ -80,17 +80,17 @@ class Deal:
     
     def transfer_deal(self, account_id, target_account_id, amount, category, description=""):
         """
-        Transfère un montant d'un compte à un autre.
+        Transfers an amount from one account to another.
         
         Args:
-            account_id (int): ID du compte source.
-            target_account_id (int): ID du compte destination.
-            amount (float): Montant du transfert.
-            category (str): Catégorie du transfert.
-            description (str): Description du transfert.
+            account_id (int): Source account ID.
+            target_account_id (int): Destination account ID.
+            amount (float): Transfer amount.
+            category (str): Transfer category.
+            description (str): Transfer description.
             
         Returns:
-            tuple: (bool, str) - Statut et message.
+            tuple: (bool, str) - Status and message.
         """
 
         if amount <= 0:

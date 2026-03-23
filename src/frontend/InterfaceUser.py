@@ -126,7 +126,7 @@ class InterfaceUser(Interface):
             balance = user[7] if user[7] is not None else 0.0
             self.balance_label.configure(text=f"Solde : {balance:,.2f}€".replace(",", " ").replace(".", ","))
             
-            # Charger l'historique
+            # Load history
             account_id = user[8]
             if account_id:
                 self.load_history(account_id)
@@ -180,5 +180,5 @@ class InterfaceUser(Interface):
         from src.frontend.transferui import TransferPopup
         popup = TransferPopup(self, account_id=account_id, login=login)
         self.wait_window(popup)
-        # Rafraîchir les données après la fermeture du popup
+        # Refresh data after popup closes
         self.refresh_data()

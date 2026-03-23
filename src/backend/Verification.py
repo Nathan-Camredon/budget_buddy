@@ -41,7 +41,7 @@ class Verify:
             return False
 
     def is_admin(self):
-        """Vérifie si l'utilisateur est un administrateur (1) ou non (0)."""
+        """Checks if the user is an administrator (1) or not (0)."""
         db_path = "src/database/budget_buddy.db"
         connexion = sqlite3.connect(db_path)
         
@@ -52,11 +52,11 @@ class Verify:
         
         connexion.close()
         
-        # On retourne True si result[0] est 1, False sinon
+        # Return True if result[0] is 1, else False
         return result[0] == 1 if result else False
 
     def verify(self):
-        """Vérifie l'existence de l'ID et la validité du mot de passe."""
+        """Verifies the existence of the ID and the validity of the password."""
         if self.checkid() and self.checkpassword():
             print("Connexion autorisé")
             return True

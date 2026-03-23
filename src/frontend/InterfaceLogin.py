@@ -110,7 +110,7 @@ class InterfaceLogin(Interface):
 
         self._clear_error()
 
-        # Logique de vérification déplacée ici pour alléger le main
+        # Verification logic moved here to lighten the main script
         verifier = Verify(username, password)
         
         if verifier.verify():
@@ -123,16 +123,16 @@ class InterfaceLogin(Interface):
             else:
                 print("Accès Client : Redirection vers InterfaceUser...")
                 if self.controller:
-                    # On récupère les données de l'utilisateur pour l'interface client
+                    # Retrieve user data for the client interface
                     from src.backend.allaccount import AllAccount
                     user_data = AllAccount.get_user_by_email(username)
                     self.controller.current_user = user_data
-                    # On demande à la page utilisateur de se rafraîchir avant de l'afficher
+                    # Refresh the user page before displaying it
                     if hasattr(self.controller.user_page, 'refresh_data'):
                         self.controller.user_page.refresh_data()
                     self.controller.show_user()
             
-            # Déclencher le callback optionnel si présent
+            # Trigger optional callback if present
             if self._on_login:
                 self._on_login(username, password)
         else:

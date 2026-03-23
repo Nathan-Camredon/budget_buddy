@@ -9,7 +9,7 @@ class Database:
         self.create_tables()
 
     def create_tables(self):
-        # Activation des contraintes de clés étrangères (obligatoire sur SQLite)
+        # Activation of foreign key constraints (mandatory on SQLite)
         self.cursor.execute("PRAGMA foreign_keys = ON;")
 
         # Table CUSTOMER 
@@ -38,7 +38,7 @@ class Database:
             )
         ''')
 
-        # Table HISTORY (Historique des transactions)
+        # Table HISTORY (Transaction history)
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

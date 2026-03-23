@@ -6,9 +6,9 @@ class GraphicBoard:
 
     def draw_stackplot(self, x, y, labels=None, title="Revenus du compte", xlabel="Temps", ylabel="Montant", show=True):
         """
-        Affiche un graphique de type stackplot.
-        x: Les données de l'axe X (ex: dates ou indices).
-        y: Les données de l'axe Y (peut être une liste de listes pour empiler).
+        Displays a stackplot-type graph.
+        x: X-axis data (e.g., dates or indices).
+        y: Y-axis data (can be a list of lists for stacking).
         """
         self.ax.clear()
         self.ax.stackplot(x, y, labels=labels)

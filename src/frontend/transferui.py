@@ -5,6 +5,60 @@ from src.frontend.Abstract.Button import Button
 from src.database.database import Database
 from src.backend.deal import Deal
 
+class CustomWithdrawalDialog(ctk.CTkToplevel):
+    def __init__(self, master, title="Retrait"):
+        super().__init__(master)
+        self.title(title)
+        self.geometry("350x250")
+        self.resizable(False, False)
+        
+        # Center the dialog
+        self.update_idletasks()
+        try:
+            px = master.winfo_x() + (master.winfo_width() // 2) - (self.winfo_width() // 2)
+            py = master.winfo_y() + (master.winfo_height() // 2) - (self.winfo_height() // 2)
+            self.geometry(f"+{px}+{py}")
+        except Exception:
+            pass
+            
+        self.grab_set()
+        
+        self.amount = None
+        self.payment_type = None
+        
+        # Setup UI
+        ctk.CTkLabel(self, text="Montant du retrait (€) :").pack(pady=(20, 5))
+        self.amount_entry = ctk.CTkEntry(self, placeholder_text="Ex: 50.00")
+        self.amount_entry.pack(pady=5, padx=20, fill="x")
+        
+        ctk.CTkLabel(self, text="Type de paiement :").pack(pady=(10, 5))
+        self.type_combo = ctk.CTkComboBox(self, values=["Carte Bancaire", "Espèces", "Virement", "Chèque"])
+        self.type_combo.pack(pady=5, padx=20, fill="x")
+        self.type_combo.set("Carte Bancaire")
+        
+        btn_frame = ctk.CTkFrame(self, fg_color="transparent")
+        btn_frame.pack(pady=20, fill="x")
+        
+        ctk.CTkButton(btn_frame, text="Annuler", fg_color="gray", command=self.cancel).pack(side="left", padx=20, expand=True)
+        ctk.CTkButton(btn_frame, text="Valider", command=self.confirm).pack(side="right", padx=20, expand=True)
+        
+    def confirm(self):
+        val = self.amount_entry.get()
+        if val:
+            self.amount = val
+            self.payment_type = self.type_combo.get()
+            self.destroy()
+            
+    def cancel(self):
+        self.destroy()
+        
+    def get_amount(self):
+        return self.amount
+        
+    def get_payment_type(self):
+        return self.payment_type
+
+
 class TransferPopup(Popup):
     """
     Popup interface for banking transactions.
@@ -104,6 +158,21 @@ class TransferPopup(Popup):
         )
         content_box.pack(fill="both", expand=True, padx=10, pady=20)
         
+        # Add a controls bar for sorting
+        controls_bar = ctk.CTkFrame(content_box, fg_color="transparent")
+        controls_bar.pack(fill="x", side="top", padx=10, pady=5)
+        
+        self.sort_var = ctk.StringVar(value="Date (Plus récent)")
+        self.sort_combo = ctk.CTkComboBox(
+            controls_bar, 
+            variable=self.sort_var,
+            values=["Date (Plus récent)", "Date (Plus ancien)", "Montant (Croissant)", "Montant (Décroissant)"],
+            command=self._on_sort_change,
+            width=180
+        )
+        self.sort_combo.pack(side="right", padx=5)
+        ctk.CTkLabel(controls_bar, text="Trier par :").pack(side="right", padx=5)
+        
         # Internal header bar in the box (mimicking the image)
         header_bar = ctk.CTkFrame(content_box, height=40, fg_color="#424242", corner_radius=0)
         header_bar.pack(fill="x", side="top")
@@ -117,6 +186,10 @@ class TransferPopup(Popup):
         # Container for entries (Scrollable if needed, but here simple frame)
         self.entries_container = ctk.CTkScrollableFrame(content_box, fg_color="transparent")
         self.entries_container.pack(fill="both", expand=True, padx=5, pady=5)
+
+    def _on_sort_change(self, choice):
+        """Callback for the sort combobox."""
+        self._load_data()
 
     def _build_footer(self, parent):
         """Build the footer with graph and close button."""
@@ -136,6 +209,20 @@ class TransferPopup(Popup):
         # Draw axis
         graph_canvas.create_line(10, 110, 290, 110, fill="grey")  # X
         graph_canvas.create_line(10, 10, 10, 110, fill="grey")   # Y
+        
+        # Add labels for axes
+        graph_canvas.create_text(15, 10, text="Montant", fill="grey", anchor="w", font=ctk.CTkFont(size=10))
+        graph_canvas.create_text(290, 120, text="Temps", fill="grey", anchor="se", font=ctk.CTkFont(size=10))
+
+        # Add scale markers (Montants clés)
+        # 0€ at the bottom
+        graph_canvas.create_text(5, 110, text="0€", fill="grey", anchor="e", font=ctk.CTkFont(size=9))
+        # 500€ in the middle
+        graph_canvas.create_text(5, 60, text="500€", fill="grey", anchor="e", font=ctk.CTkFont(size=9))
+        graph_canvas.create_line(10, 60, 290, 60, fill="#333333", dash=(2, 4))
+        # 1000€ at the top
+        graph_canvas.create_text(5, 15, text="1000€", fill="grey", anchor="e", font=ctk.CTkFont(size=9))
+        graph_canvas.create_line(10, 15, 290, 15, fill="#333333", dash=(2, 4))
 
         # Draw decorative lines
         points_red = [(10, 100), (50, 80), (100, 90), (150, 40), (200, 70), (250, 30), (290, 20)]
@@ -175,16 +262,29 @@ class TransferPopup(Popup):
 
         # 2. Update Transactions
         try:
-            query_history = """
+            order_clause = "ORDER BY date DESC"
+            if hasattr(self, 'sort_var'):
+                sort_val = self.sort_var.get()
+                if sort_val == "Date (Plus ancien)":
+                    order_clause = "ORDER BY date ASC"
+                elif sort_val == "Montant (Croissant)":
+                    order_clause = "ORDER BY amount ASC"
+                elif sort_val == "Montant (Décroissant)":
+                    order_clause = "ORDER BY amount DESC"
+
+            query_history = f"""
                 SELECT date, description, amount, transaction_type 
                 FROM history 
                 WHERE account_id = ? 
-                ORDER BY date DESC 
+                {order_clause} 
                 LIMIT 10
             """
             history = self.db.fetch_all(query_history, (self.account_id,))
             
-            # Clear previous items if any (though here it's first load)
+            # Clear previous items if any
+            for child in self.entries_container.winfo_children():
+                child.destroy()
+                
             for row in history:
                 row_frame = ctk.CTkFrame(self.entries_container, fg_color="transparent")
                 row_frame.pack(fill="x", pady=2)
@@ -218,16 +318,19 @@ class TransferPopup(Popup):
                 pass
 
     def _withdraw(self):
-        """Open a dialog to make a withdrawal."""
-        dialog = ctk.CTkInputDialog(text="Entrez le montant du retrait (€):", title="Retrait")
-        amount = dialog.get_input()
-        if amount:
+        """Open a custom dialog to make a withdrawal with payment type."""
+        dialog = CustomWithdrawalDialog(self, title="Retrait")
+        self.wait_window(dialog)
+        
+        amount = dialog.get_amount()
+        payment_type = dialog.get_payment_type()
+        
+        if amount and payment_type:
             try:
                 val = float(amount)
                 deal = Deal()
-                success, msg = deal.add_deal(self.account_id, -val, "Retrait", "Retrait via UI") # Deal expects positive or negative?
-                # Actually Deal.remove_deal is better
-                success, msg = deal.remove_deal(self.account_id, val, "Retrait", "Retrait via UI")
+                # Use payment_type as the category
+                success, msg = deal.remove_deal(self.account_id, val, payment_type, f"Retrait par {payment_type}")
                 if success:
                     self._load_data()
             except ValueError:
