@@ -46,25 +46,25 @@ class InterfaceUser(Interface):
         button_colors = {"fg_color": "#2c3e50", "hover_color": "#34495e"}
 
         self.btn_transactions = Button(
-            self.sidebar, text="Transactions", command=self.dummy, 
+            self.sidebar, text="Transactions", command=self.open_transfer_popup, 
             font=button_font, height=45, **button_colors
         )
         self.btn_transactions.pack(fill="x", pady=10)
 
         self.btn_depots = Button(
-            self.sidebar, text="Depots", command=self.dummy, 
+            self.sidebar, text="Depots", command=self.open_transfer_popup, 
             font=button_font, height=45, **button_colors
         )
         self.btn_depots.pack(fill="x", pady=10)
 
         self.btn_retrait = Button(
-            self.sidebar, text="Retrait", command=self.dummy, 
+            self.sidebar, text="Retrait", command=self.open_transfer_popup, 
             font=button_font, height=45, **button_colors
         )
         self.btn_retrait.pack(fill="x", pady=10)
 
         self.btn_versement = Button(
-            self.sidebar, text="Versement", command=self.dummy, 
+            self.sidebar, text="Versement", command=self.open_transfer_popup, 
             font=button_font, height=45, **button_colors
         )
         self.btn_versement.pack(fill="x", pady=10)
@@ -170,5 +170,15 @@ class InterfaceUser(Interface):
             ctk.CTkLabel(row, text=str(t[5]), width=widths[3], text_color="black").pack(side="left", padx=5)
             ctk.CTkLabel(row, text=str(t[6]) if t[6] else "", width=widths[4], text_color="black", anchor="w").pack(side="left", padx=5)
 
-    def dummy(self):
-        print("Bouton cliqué (en cours d'implémentation)")
+    def open_transfer_popup(self):
+        user = self.controller.current_user
+        if not user:
+            return
+        account_id = user[8]
+        login = user[1]
+        
+        from src.frontend.transferui import TransferPopup
+        popup = TransferPopup(self, account_id=account_id, login=login)
+        self.wait_window(popup)
+        # Rafraîchir les données après la fermeture du popup
+        self.refresh_data()

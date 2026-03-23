@@ -9,7 +9,7 @@ class App(ctk.CTk):
 
         # Configuration de la fenêtre principale
         self.title("Budget Buddy")
-        self.geometry("1920x1080")
+        self.geometry("1280x720")
         self.resizable(False, False)
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
